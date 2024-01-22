@@ -53,7 +53,57 @@ function BlockSpinner({ position = [0, 0, 0] })
             receiveShadow
         />
 
-        {/* FirstObsrtacle */}
+        {/* Spinner Obstacle */}
+        <RigidBody 
+            ref={obstacle} //Animate the obstacle
+            type='kinematicPosition' 
+            position={[0, 0.3, 0]}
+            restitution={0.2} //for a slight bounce
+            friction={0} //without rubbing too much against the floor
+        >
+                <mesh 
+                    geometry={boxGeometry}
+                    material={obstacleMaterial}
+                    scale={[3.5, 0.3, 0.3]}
+                    castShadow
+                    receiveShadow
+                />
+        </RigidBody>
+
+    </group>
+}
+
+
+function BlockLimbo({ position = [0, 0, 0] })
+{
+    const obstacle = useRef()
+
+    //Offset animation in time to avoid having the Limbo obstacles having identical animation. We want the same speed but not at the same time. We use "2 * PI" to offset the sinus.
+    const [timeOffset] = useState(() => Math.random()  * Math.PI * 2 )
+
+    useFrame((state) =>
+    {
+        const time = state.clock.getElapsedTime()
+        
+        //We want the obstacle to go up and down so we use Math.sin() to get a value that go up and down between 1 and -1, we send it the time and then tweak the value so it's above the floor.
+        const y = Math.sin(time) + 1.15
+        //We use the position prop to make sure the group move all together
+        obstacle.current.setNextKinematicTranslation({ x: position[0], y: position[1]+ y, z: position[2] })
+
+    })
+
+    return <group position={position}>
+
+        {/* Floor */}
+        <mesh 
+            geometry={boxGeometry} 
+            material={floor2Material}
+            position={ [ 0, - 0.1, 0 ] } 
+            scale={[4, 0.2, 4]} 
+            receiveShadow
+        />
+
+        {/* Limbo Obstacle */}
         <RigidBody 
             ref={obstacle} //Animate the obstacle
             type='kinematicPosition' 
@@ -75,7 +125,8 @@ function BlockSpinner({ position = [0, 0, 0] })
 
 export default function Level() {
     return <>
-        <BlockStart position={ [ 0, 0, 4 ] } />
-        <BlockSpinner position={ [0, 0, 0] } />
+        <BlockStart position={ [ 0, 0, 8 ] } />
+        <BlockSpinner position={ [0, 0, 4] } />
+        <BlockLimbo position={ [ 0, 0, 0 ] } />
     </>
 }
