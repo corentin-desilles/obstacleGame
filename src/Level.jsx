@@ -105,11 +105,11 @@ function BlockLimbo({ position = [0, 0, 0] })
 
         {/* Limbo Obstacle */}
         <RigidBody 
-            ref={obstacle} //Animate the obstacle
+            ref={obstacle} 
             type='kinematicPosition' 
             position={[0, 0.3, 0]}
-            restitution={0.2} //for a slight bounce
-            friction={0} //without rubbing too much against the floor
+            restitution={0.2} 
+            friction={0} 
         >
                 <mesh 
                     geometry={boxGeometry}
@@ -123,10 +123,61 @@ function BlockLimbo({ position = [0, 0, 0] })
     </group>
 }
 
+
+function BlockAxe({ position = [0, 0, 0] })
+{
+    const obstacle = useRef()
+
+    const [timeOffset] = useState(() => Math.random()  * Math.PI * 2 )
+
+    useFrame((state) =>
+    {
+        const time = state.clock.getElapsedTime()
+        
+        //Increase amplitude of Math.sin() by multiplying it by 1.25 so that the obstacle moves from side to side
+        const x = Math.sin(time + timeOffset) * 1.25
+        obstacle.current.setNextKinematicTranslation({ x: position[0] + x, y: position[1] + 0.75, z: position[2] })
+
+    })
+
+    return <group position={position}>
+
+        {/* Floor */}
+        <mesh 
+            geometry={boxGeometry} 
+            material={floor2Material}
+            position={ [ 0, - 0.1, 0 ] } 
+            scale={[4, 0.2, 4]} 
+            receiveShadow
+        />
+
+        {/* Limbo Obstacle */}
+        <RigidBody 
+            ref={obstacle} 
+            type='kinematicPosition' 
+            position={[0, 0.3, 0]}
+            restitution={0.2} 
+            friction={0} 
+        >
+                <mesh 
+                    geometry={boxGeometry}
+                    material={obstacleMaterial}
+                    scale={[1.5, 1.5, 0.3]}
+                    castShadow
+                    receiveShadow
+                />
+        </RigidBody>
+
+    </group>
+}
+
+
 export default function Level() {
     return <>
-        <BlockStart position={ [ 0, 0, 8 ] } />
-        <BlockSpinner position={ [0, 0, 4] } />
-        <BlockLimbo position={ [ 0, 0, 0 ] } />
+        <BlockStart position={ [ 0, 0, 12 ] } />
+        <BlockSpinner position={ [0, 0, 8] } />
+        <BlockLimbo position={ [ 0, 0, 4 ] } />
+        <BlockAxe position={ [ 0, 0, 0 ] } />
+
     </>
 }
