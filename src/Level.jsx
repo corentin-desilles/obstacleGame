@@ -2,6 +2,7 @@ import * as THREE from 'three'
 import { RigidBody } from '@react-three/rapier'
 import { useState, useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
+import { useGLTF } from '@react-three/drei'
 
 const boxGeometry = new THREE.BoxGeometry(1,1,1)
 
@@ -25,6 +26,42 @@ function BlockStart({ position = [0, 0, 0] })
 
     </group>
 }
+
+
+function BlockEnd({ position = [0, 0, 0] })
+{
+    const hamburger = useGLTF('./hamburger.glb')
+
+    //To activate shadows on the model we use forEach  and the the castShadow to true since the scene only contins meshes.
+    hamburger.scene.children.forEach((mesh) =>
+    {
+        mesh.castShadow = true
+    })
+
+    return <group position={position}>
+
+        {/* Floor */}
+        <mesh 
+            geometry={boxGeometry} 
+            material={floor1Material}
+            position={ [ 0, 0, 0 ] } 
+            scale={[4, 0.2, 4]} 
+            receiveShadow
+        />
+
+        {/* Finish Line model */}
+        <RigidBody 
+            type='fixed' 
+            colliders='hull'
+            position={[0, 0.25, 0]}
+            restitution={0.2}
+            friction={0}
+        >
+                <primitive object={hamburger.scene} scale={0.2} />
+        </RigidBody>
+    </group>
+}
+
 
 function BlockSpinner({ position = [0, 0, 0] })
 {
@@ -174,10 +211,11 @@ function BlockAxe({ position = [0, 0, 0] })
 
 export default function Level() {
     return <>
-        <BlockStart position={ [ 0, 0, 12 ] } />
-        <BlockSpinner position={ [0, 0, 8] } />
-        <BlockLimbo position={ [ 0, 0, 4 ] } />
-        <BlockAxe position={ [ 0, 0, 0 ] } />
+        <BlockStart position={ [ 0, 0, 16 ] } />
+        <BlockSpinner position={ [0, 0, 12] } />
+        <BlockLimbo position={ [ 0, 0, 8 ] } />
+        <BlockAxe position={ [ 0, 0, 4 ] } />
+        <BlockEnd position={ [ 0, 0, 0 ] } />
 
     </>
 }
