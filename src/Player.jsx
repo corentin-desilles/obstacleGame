@@ -1,12 +1,46 @@
-import { RigidBody } from "@react-three/rapier"
+import { useRapier, RigidBody } from "@react-three/rapier"
 import { useFrame } from "@react-three/fiber"
 import { useKeyboardControls } from "@react-three/drei" //this hook return a function to subscribe to key changes and a function to get the current state of the keys
-import { useRef } from "react"
+import { useEffect, useRef } from "react"
 
 export default function Player() {
 
     const body = useRef()
     const [subscribeKeys, getKeys] = useKeyboardControls()
+    const {rapier, world} = useRapier()
+    const rapierWorld = world
+
+    const jump = () =>
+    {
+        const origin = body.current.translation()
+        origin.y -= 0.31
+        const direction = {x: 0, y: - 1, z: 0}
+        const ray = new rapier.Ray(origin, direction)
+        const hit = rapierWorld.castRay(ray, 10, true)
+
+        if(hit.toi < 0.15)
+            body.current.applyImpulse({x: 0, y: 0.5, z: 0})
+
+     
+    }
+    
+        useEffect(() => 
+        {
+            const unsubscribeJump = subscribeKeys(
+                (state) => state.jump,
+                (value) =>
+                {
+                    if(value)
+                        jump()
+                }
+            )
+
+            return () =>
+            {
+                unsubscribeJump()
+            }
+
+        }, [])
 
         useFrame((state, delta) =>
         {
@@ -50,6 +84,8 @@ export default function Player() {
         colliders="ball"
         restitution={0.2}
         friction={1}
+        linearDamping={0.5}
+        angularDamping={0.5}
     >
         <mesh
             castShadow
