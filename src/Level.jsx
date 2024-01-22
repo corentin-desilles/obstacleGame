@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import { RigidBody } from '@react-three/rapier'
-import { useState, useRef } from 'react'
+import { useState, useRef, useMemo } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { useGLTF } from '@react-three/drei'
 
@@ -11,7 +11,7 @@ const floor2Material = new THREE.MeshStandardMaterial({ color: 'greenyellow' })
 const obstacleMaterial = new THREE.MeshStandardMaterial({ color: 'orangered' })
 const wallMaterial = new THREE.MeshStandardMaterial({ color: 'slategrey' })
 
-function BlockStart({ position = [0, 0, 0] })
+export function BlockStart({ position = [0, 0, 0] })
 {
     return <group position={position}>
 
@@ -28,7 +28,7 @@ function BlockStart({ position = [0, 0, 0] })
 }
 
 
-function BlockEnd({ position = [0, 0, 0] })
+export function BlockEnd({ position = [0, 0, 0] })
 {
     const hamburger = useGLTF('./hamburger.glb')
 
@@ -63,7 +63,7 @@ function BlockEnd({ position = [0, 0, 0] })
 }
 
 
-function BlockSpinner({ position = [0, 0, 0] })
+export function BlockSpinner({ position = [0, 0, 0] })
 {
 
     const obstacle = useRef()
@@ -111,7 +111,7 @@ function BlockSpinner({ position = [0, 0, 0] })
 }
 
 
-function BlockLimbo({ position = [0, 0, 0] })
+export function BlockLimbo({ position = [0, 0, 0] })
 {
     const obstacle = useRef()
 
@@ -161,7 +161,7 @@ function BlockLimbo({ position = [0, 0, 0] })
 }
 
 
-function BlockAxe({ position = [0, 0, 0] })
+export function BlockAxe({ position = [0, 0, 0] })
 {
     const obstacle = useRef()
 
@@ -209,13 +209,31 @@ function BlockAxe({ position = [0, 0, 0] })
 }
 
 
-export default function Level() {
-    return <>
-        <BlockStart position={ [ 0, 0, 16 ] } />
-        <BlockSpinner position={ [0, 0, 12] } />
-        <BlockLimbo position={ [ 0, 0, 8 ] } />
-        <BlockAxe position={ [ 0, 0, 4 ] } />
-        <BlockEnd position={ [ 0, 0, 0 ] } />
+export function Level({ count = 5, types = [ BlockSpinner, BlockAxe, BlockLimbo] }) 
+{
+    const blocks = useMemo(() =>
+    {
+        const blocks = []
 
+        for(let i = 0; i < count; i++)
+        {
+            const type = types[ Math.floor(Math.random() * types.length) ]
+            blocks.push(type)
+        }
+
+        return blocks
+    }, [count, types])
+
+   return <>
+        <BlockStart position={ [ 0, 0, 0 ] } />
+
+        { blocks.map((Block, index) => 
+            <Block 
+                key={index}
+                position={[0, 0, -(index+1) * 4]}
+            />
+        )}
+
+        <BlockEnd position={ [ 0, 0, -(count + 1) * 4 ] } />
     </>
 }
