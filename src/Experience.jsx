@@ -10,10 +10,16 @@ export default function Experience()
     const blocksSeed = useGame((state) => {return state.blocksSeed})
 
     return <>
-    <Physics>
-        <Lights />
-        <Level count={blocksCount} seed={blocksSeed} />
-        <Player />
-    </Physics>
+
+        <color 
+            args={['#bdedfc']} 
+            attach="background"
+        />
+
+        <Physics>
+            <Lights />
+            <Level count={blocksCount} seed={blocksSeed} />
+            <Player />
+        </Physics>
     </>
 }

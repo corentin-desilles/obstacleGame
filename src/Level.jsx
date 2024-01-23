@@ -2,7 +2,7 @@ import * as THREE from 'three'
 import { CuboidCollider, RigidBody } from '@react-three/rapier'
 import { useState, useRef, useMemo } from 'react'
 import { useFrame } from '@react-three/fiber'
-import { useGLTF } from '@react-three/drei'
+import { Float, Text, useGLTF } from '@react-three/drei'
 
 const boxGeometry = new THREE.BoxGeometry(1,1,1)
 
@@ -14,6 +14,23 @@ const wallMaterial = new THREE.MeshStandardMaterial({ color: 'slategrey' })
 export function BlockStart({ position = [0, 0, 0] })
 {
     return <group position={position}>
+        <Float
+            floatIntensity={0.25}
+            rotationIntensity={0.25}
+        >
+            <Text 
+                font='./bebas-neue-v9-latin-regular.woff'
+                scale={0.4}
+                maxWidth={0.25}
+                lineHeight={0.8}
+                textAlign='center'
+                position={[1, 0.75, 0]}
+                rotation-y={- 0.5}
+            >
+                Bouboule qui Rouroule
+                <meshBasicMaterial toneMapped={false} />
+            </Text>
+        </Float>
 
         {/* Floor */}
         <mesh 
