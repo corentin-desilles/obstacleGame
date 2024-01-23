@@ -9,7 +9,7 @@ export default function Experience()
     const blocksCount = useGame((state) => {return state.blocksCount})
 
     return <>
-    <Physics debug>
+    <Physics>
         <Lights />
         <Level count={blocksCount} />
         <Player />
