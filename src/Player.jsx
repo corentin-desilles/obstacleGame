@@ -3,6 +3,7 @@ import { useFrame } from "@react-three/fiber"
 import { useKeyboardControls } from "@react-three/drei" //this hook return a function to subscribe to key changes and a function to get the current state of the keys
 import { useEffect, useRef, useState } from "react"
 import * as THREE from 'three'
+import useGame from "./stores/useGame"
 
 export default function Player() {
 
@@ -13,6 +14,11 @@ export default function Player() {
 
     const [smoothedCameraPosition] = useState(() => new THREE.Vector3(10, 10, 10))
     const [smoothedCameraTarget] = useState(() => new THREE.Vector3())
+
+    const start = useGame((state) => state.start)
+    const end = useGame((state) => state.end)
+    const restart = useGame((state) => state.restart)
+    const blocksCount = useGame((state) => state.blocksCount)
 
     const jump = () =>
     {
@@ -39,9 +45,15 @@ export default function Player() {
                 }
             )
 
+            const unsubscribeAny = subscribeKeys(() =>
+            {
+                start()
+            })
+
             return () =>
             {
                 unsubscribeJump()
+                unsubscribeAny()
             }
 
         }, [])
@@ -97,6 +109,14 @@ export default function Player() {
 
             state.camera.position.copy(smoothedCameraPosition)
             state.camera.lookAt(smoothedCameraTarget)
+
+        // Phases
+            if(bodyPosition.z < - (blocksCount * 4 + 2))
+                end()
+
+            if(bodyPosition.y < - 4)
+               restart()
+
         })
    
     return <>
