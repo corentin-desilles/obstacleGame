@@ -91,9 +91,8 @@ export function BlockEnd({ position = [0, 0, 0] })
 
 export function BlockSpinner({ position = [0, 0, 0] })
 {
-
     const obstacle = useRef()
-    const [speed] = useState(() => (Math.random() +0.2) * (Math.random() < 0.5 ? - 1 : 1) ) //get random value for rotation speed and rotation direction
+    const [speed] = useState(() => (Math.random() +0.2) * (Math.random() < 0.5 ? - 1 : 1)) //get random value for rotation speed and rotation direction
 
     //get the time spent since the experience start and use it as the angle to rotate the obstacle
     useFrame((state) =>
@@ -106,7 +105,6 @@ export function BlockSpinner({ position = [0, 0, 0] })
     })
 
     return <group position={position}>
-
         {/* Floor */}
         <mesh 
             geometry={boxGeometry} 
@@ -132,7 +130,6 @@ export function BlockSpinner({ position = [0, 0, 0] })
                     receiveShadow
                 />
         </RigidBody>
-
     </group>
 }
 
@@ -142,16 +139,16 @@ export function BlockLimbo({ position = [0, 0, 0] })
     const obstacle = useRef()
 
     //Offset animation in time to avoid having the Limbo obstacles having identical animation. We want the same speed but not at the same time. We use "2 * PI" to offset the sinus.
-    const [timeOffset] = useState(() => Math.random()  * Math.PI * 2 )
+    const [timeOffset] = useState(() => Math.random() * Math.PI * 2)
 
     useFrame((state) =>
     {
         const time = state.clock.getElapsedTime()
         
         //We want the obstacle to go up and down so we use Math.sin() to get a value that go up and down between 1 and -1, we send it the time and then tweak the value so it's above the floor.
-        const y = Math.sin(time) + 1.15
+        const y = Math.sin(time + timeOffset) + 1.15
         //We use the position prop to make sure the group move all together
-        obstacle.current.setNextKinematicTranslation({ x: position[0], y: position[1]+ y, z: position[2] })
+        obstacle.current.setNextKinematicTranslation({ x: position[0], y: position[1] + y, z: position[2] })
 
     })
 
@@ -190,7 +187,6 @@ export function BlockLimbo({ position = [0, 0, 0] })
 export function BlockAxe({ position = [0, 0, 0] })
 {
     const obstacle = useRef()
-
     const [timeOffset] = useState(() => Math.random()  * Math.PI * 2 )
 
     useFrame((state) =>
@@ -211,10 +207,11 @@ export function BlockAxe({ position = [0, 0, 0] })
             material={floor2Material}
             position={ [ 0, - 0.1, 0 ] } 
             scale={[4, 0.2, 4]} 
+            castShadow
             receiveShadow
         />
 
-        {/* Limbo Obstacle */}
+        {/* Axe Obstacle */}
         <RigidBody 
             ref={obstacle} 
             type='kinematicPosition' 
@@ -275,15 +272,13 @@ function Bounds( {length = 1}) {
 
         {/* Collider for the floor so the player doesn't fall through it, we scale and move it so it covers the whole floor */}
         <CuboidCollider 
+            type="fixed"
             args={[ 2, 0.1, 2 * length ]}
             position={[ 0, - 0.1, - (length * 2) + 2 ]}
             restitution={0.2}
             //friction value to 1 so when we rotate the ball it will move forward
             friction={1}
-        >
-
-        </CuboidCollider>
-
+        />
     </RigidBody>
     </>
 }
@@ -314,11 +309,11 @@ export function Level({
         { blocks.map((Block, index) => 
             <Block 
                 key={index}
-                position={[0, 0, -(index+1) * 4]}
+                position={[0, 0, - (index + 1) * 4]}
             />
         )}
 
-        <BlockEnd position={ [ 0, 0, -(count + 1) * 4 ] } />
+        <BlockEnd position={ [ 0, 0, - (count + 1) * 4 ] } />
 
         <Bounds length={count + 2} />  {/* We add 2 to count bcz there is also start and end blocks */}
     </>

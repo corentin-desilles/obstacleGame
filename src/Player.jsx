@@ -10,7 +10,6 @@ export default function Player() {
     const body = useRef()
     const [subscribeKeys, getKeys] = useKeyboardControls()
     const {rapier, world} = useRapier()
-    const rapierWorld = world
 
     const [smoothedCameraPosition] = useState(() => new THREE.Vector3(10, 10, 10))
     const [smoothedCameraTarget] = useState(() => new THREE.Vector3())
@@ -26,12 +25,12 @@ export default function Player() {
         origin.y -= 0.31
         const direction = {x: 0, y: - 1, z: 0}
         const ray = new rapier.Ray(origin, direction)
-        const hit = rapierWorld.castRay(ray, 10, true)
+        const hit = world.castRay(ray, 10, true)
 
         if(hit.toi < 0.15)
+        {
             body.current.applyImpulse({x: 0, y: 0.5, z: 0})
-
-     
+        }
     }
 
     const reset = () =>

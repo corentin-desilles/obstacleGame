@@ -3,7 +3,6 @@ import { useEffect, useRef } from "react"
 import { addEffect } from "@react-three/fiber"
 import useGame from "./stores/useGame"
 
-
 export default function Interface()
 {
     const time = useRef()
@@ -27,7 +26,7 @@ export default function Interface()
             if(state.phase === 'playing')
                 elapsedTime = Date.now() - state.startTime
             else if(state.phase === 'ended')
-                elapsedTime = state.endTime - startTime
+                elapsedTime = state.endTime - state.startTime
 
             elapsedTime /= 1000
             elapsedTime = elapsedTime.toFixed(2)
@@ -61,12 +60,12 @@ export default function Interface()
                 <div className={`key ${forward ? 'active' : ''}`}></div>
             </div>
             <div className="raw">
-            <div className={`key ${leftward ? 'active' : ''}`}></div>
-            <div className={`key ${backward ? 'active' : ''}`}></div>
-            <div className={`key ${rightward ? 'active' : ''}`}></div>
+                <div className={`key ${leftward ? 'active' : ''}`}></div>
+                <div className={`key ${backward ? 'active' : ''}`}></div>
+                <div className={`key ${rightward ? 'active' : ''}`}></div>
             </div>
             <div className="raw">
-            <div className={`key large ${jump ? 'active' : ''}`}></div>
+                <div className={`key large ${jump ? 'active' : ''}`}></div>
             </div>
         </div>
 
