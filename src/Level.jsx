@@ -104,7 +104,7 @@ export function BlockSpinner({ position = [0, 0, 0] }) {
 
     function onHit({ totalForceMagnitude }) {
         hitSound.currentTime = 0
-        hitSound.volume = Math.min(totalForceMagnitude / 10000, 1)
+        hitSound.volume = Math.min(totalForceMagnitude / 500, 1)
         hitSound.play()
     }
 
@@ -168,7 +168,7 @@ export function BlockLimbo({ position = [0, 0, 0] }) {
 
     function onHit({ totalForceMagnitude }) {
         hitSound.currentTime = 0
-        hitSound.volume = Math.min(totalForceMagnitude / 10000, 1)
+        hitSound.volume = Math.min(totalForceMagnitude / 500, 1)
         hitSound.play()
     }
 
@@ -229,7 +229,7 @@ export function BlockAxe({ position = [0, 0, 0] }) {
 
     function onHit({ totalForceMagnitude }) {
         hitSound.currentTime = 0
-        hitSound.volume = Math.min(totalForceMagnitude / 10000, 1)
+        hitSound.volume = Math.min(totalForceMagnitude / 500, 1)
         hitSound.play()
     }
 

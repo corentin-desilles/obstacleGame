@@ -8,7 +8,7 @@ function SoundManager() {
 
     const completeSound = useMemo(() => {
         const sound = new Audio('./sounds/complete.mp3')
-        sound.volume = 0.2
+        sound.volume = 0.3
         return sound
     }, [])
 
