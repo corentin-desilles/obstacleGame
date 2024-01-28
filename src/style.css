@@ -78,3 +78,45 @@ body,
 .controls .key.active {
    background: #ffffff99
 }
+
+.misc-control {
+    display: flex;
+    gap: 16px;
+    
+    color: #ffffff;
+    font-size: 24px;
+  }
+
+  .misc-controls {
+    display: grid;
+    gap: 16px;
+    position: absolute;
+    bottom: 10%;
+    right: 40px;
+  }
+
+  .audio-toggle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  
+    position: absolute;
+    top: 20px;
+    right: 40px;
+    width: 64px;
+    height: 64px;
+    color: #ffffff;
+    background-color: #00000033;
+    border: none;
+    cursor: pointer;
+    pointer-events: auto;
+  
+    border-radius: 8px;
+  }
+  
+  @media screen and (min-width: 2048px) {
+  
+    .audio-toggle, .misc-controls {
+      right: 20vw;
+    }
+  }

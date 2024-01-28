@@ -2,12 +2,18 @@ import { useKeyboardControls } from '@react-three/drei'
 import { useEffect, useRef } from 'react'
 import { addEffect } from '@react-three/fiber'
 import { useGame } from './stores/useGame'
+import { useAudio } from './stores/useAudio'
+import UseAnimations from 'react-useanimations'
+import volume from 'react-useanimations/lib/volume'
 
 export default function Interface() {
     const time = useRef()
+
+    const audio = useAudio(state => state.audio)
+    const toggleAudio = useAudio(state => state.toggleAudio)
+
     const restart = useGame(state => state.restart)
     const phase = useGame(state => state.phase)
-
     const forward = useKeyboardControls(state => state.forward)
     const backward = useKeyboardControls(state => state.backward)
     const leftward = useKeyboardControls(state => state.leftward)
@@ -36,14 +42,29 @@ export default function Interface() {
         }
     }, [])
 
+    function handleToggleAudio(e) {
+        toggleAudio()
+        //!!!!!!!!!!!!me renseigner plus sur blur/focus!!!!!!!!!!!!
+        e.target.blur()
+    }
+
     return (
         <div className="interface">
+            {/* Audio  */}
+            <button className="audio-toggle" onClick={handleToggleAudio}>
+                <UseAnimations
+                    animation={volume}
+                    reverse={!audio}
+                    strokeColor="white"
+                />
+            </button>
+
             {/* Time */}
             <div ref={time} className="time">
                 0.00
             </div>
 
-            {/* Restart */}
+            {/* Auto restart */}
             {phase === 'ended' && (
                 <div className="restart" onClick={restart}>
                     Restart
@@ -62,6 +83,16 @@ export default function Interface() {
                 </div>
                 <div className="raw">
                     <div className={`key large ${jump ? 'active' : ''}`}></div>
+                </div>
+            </div>
+            <div className="misc-controls">
+                <div className="misc-control">
+                    <div className="key">R</div>
+                    <div className="label">Reset</div>
+                </div>
+                <div className="misc-control">
+                    <div className="key">M</div>
+                    <div className="label">Mute/Unmute</div>
                 </div>
             </div>
         </div>

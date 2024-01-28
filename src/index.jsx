@@ -4,31 +4,34 @@ import { Canvas } from '@react-three/fiber'
 import Experience from './Experience.jsx'
 import { KeyboardControls } from '@react-three/drei'
 import Interface from './Interface.jsx'
-
+import { ShortcutManager } from './managers/ShortcutManager.jsx'
 
 const root = ReactDOM.createRoot(document.querySelector('#root'))
 
 root.render(
     <KeyboardControls
         map={[
-            {name: 'forward', keys: ['ArrowUp', 'KeyW']},
-            {name: 'backward', keys: ['ArrowDown', 'KeyS']},
-            {name: 'leftward', keys: ['ArrowLeft', 'KeyA']},
-            {name: 'rightward', keys: ['ArrowRight', 'KeyD']},
-            {name: 'jump', keys: ['Space']},
+            { name: 'forward', keys: ['ArrowUp', 'KeyW'] },
+            { name: 'backward', keys: ['ArrowDown', 'KeyS'] },
+            { name: 'leftward', keys: ['ArrowLeft', 'KeyA'] },
+            { name: 'rightward', keys: ['ArrowRight', 'KeyD'] },
+            { name: 'jump', keys: ['Space'] },
+            { name: 'reset', keys: ['r', 'R'] },
+            { name: 'audio', keys: ['m', 'M'] },
         ]}
     >
         <Canvas
             shadows
-            camera={ {
+            camera={{
                 fov: 45,
                 near: 0.1,
                 far: 200,
-                position: [ 2.5, 4, 6 ]
-            } }
+                position: [2.5, 4, 6],
+            }}
         >
             <Experience />
         </Canvas>
         <Interface />
+        <ShortcutManager />
     </KeyboardControls>
 )
