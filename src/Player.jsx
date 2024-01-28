@@ -3,7 +3,7 @@ import { useFrame } from '@react-three/fiber'
 import { useKeyboardControls } from '@react-three/drei' //this hook return a function to subscribe to key changes and a function to get the current state of the keys
 import { useEffect, useRef, useState } from 'react'
 import * as THREE from 'three'
-import useGame from './stores/useGame'
+import { useGame } from './stores/useGame'
 // import { Howl, Howler } from 'howler'
 
 export default function Player() {

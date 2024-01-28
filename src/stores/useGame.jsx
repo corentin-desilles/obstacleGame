@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { subscribeWithSelector } from 'zustand/middleware'
 
-export default create(
+const useGame = create(
     subscribeWithSelector(set => {
         return {
             blocksCount: 10,
@@ -44,3 +44,5 @@ export default create(
         }
     })
 )
+
+export { useGame }

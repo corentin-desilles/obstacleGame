@@ -2,7 +2,8 @@ import { Physics } from '@react-three/rapier'
 import Lights from './Lights.jsx'
 import { Level } from './Level.jsx'
 import Player from './Player.jsx'
-import useGame from './stores/useGame.jsx'
+import { useGame } from './stores/useGame.jsx'
+import { SoundManager } from './managers/SoundManager.jsx'
 
 export default function Experience() {
     const blocksCount = useGame(state => state.blocksCount)
@@ -16,6 +17,7 @@ export default function Experience() {
                 <Lights />
                 <Level count={blocksCount} seed={blocksSeed} />
                 <Player />
+                <SoundManager />
             </Physics>
         </>
     )
