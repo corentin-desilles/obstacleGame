@@ -1,8 +1,9 @@
 import * as THREE from 'three'
 import { CuboidCollider, RigidBody } from '@react-three/rapier'
-import { useState, useRef, useMemo } from 'react'
+import { useState, useRef, useMemo, useEffect } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { Float, Text, useGLTF } from '@react-three/drei'
+import { useAudio } from './stores/useAudio'
 
 const boxGeometry = new THREE.BoxGeometry(1, 1, 1)
 
@@ -98,6 +99,19 @@ export function BlockSpinner({ position = [0, 0, 0] }) {
         obstacle.current.setNextKinematicRotation(rotation)
     })
 
+    const audio = useAudio(state => state.audio)
+    const hitSound = useMemo(() => new Audio('./sounds/jumpland48000.mp3'), [])
+
+    function onHit({ totalForceMagnitude }) {
+        hitSound.currentTime = 0
+        hitSound.volume = Math.min(totalForceMagnitude / 10000, 1)
+        hitSound.play()
+    }
+
+    useEffect(() => {
+        hitSound.muted = !audio
+    }, [audio])
+
     return (
         <group position={position}>
             {/* Floor */}
@@ -116,6 +130,7 @@ export function BlockSpinner({ position = [0, 0, 0] }) {
                 position={[0, 0.3, 0]}
                 restitution={0.2} //for a slight bounce
                 friction={0} //without rubbing too much against the floor
+                onContactForce={onHit}
             >
                 <mesh
                     geometry={boxGeometry}
@@ -148,6 +163,19 @@ export function BlockLimbo({ position = [0, 0, 0] }) {
         })
     })
 
+    const audio = useAudio(state => state.audio)
+    const hitSound = useMemo(() => new Audio('./sounds/jumpland48000.mp3'), [])
+
+    function onHit({ totalForceMagnitude }) {
+        hitSound.currentTime = 0
+        hitSound.volume = Math.min(totalForceMagnitude / 10000, 1)
+        hitSound.play()
+    }
+
+    useEffect(() => {
+        hitSound.muted = !audio
+    }, [audio])
+
     return (
         <group position={position}>
             {/* Floor */}
@@ -166,6 +194,7 @@ export function BlockLimbo({ position = [0, 0, 0] }) {
                 position={[0, 0.3, 0]}
                 restitution={0.2}
                 friction={0}
+                onContactForce={onHit}
             >
                 <mesh
                     geometry={boxGeometry}
@@ -195,6 +224,19 @@ export function BlockAxe({ position = [0, 0, 0] }) {
         })
     })
 
+    const audio = useAudio(state => state.audio)
+    const hitSound = useMemo(() => new Audio('./sounds/jumpland48000.mp3'), [])
+
+    function onHit({ totalForceMagnitude }) {
+        hitSound.currentTime = 0
+        hitSound.volume = Math.min(totalForceMagnitude / 10000, 1)
+        hitSound.play()
+    }
+
+    useEffect(() => {
+        hitSound.muted = !audio
+    }, [audio])
+
     return (
         <group position={position}>
             {/* Floor */}
@@ -214,6 +256,7 @@ export function BlockAxe({ position = [0, 0, 0] }) {
                 position={[0, 0.3, 0]}
                 restitution={0.2}
                 friction={0}
+                onContactForce={onHit}
             >
                 <mesh
                     geometry={boxGeometry}
@@ -229,10 +272,28 @@ export function BlockAxe({ position = [0, 0, 0] }) {
 
 function Bounds({ length = 1 }) {
     //We want to be able to control the length of the walls from an attribute. The length of the lvl is defined by the "count" value (amount of traps) in the "level" function so we will use this value.
+
+    // const audio = useAudio(state => state.audio)
+    // const hitSound = useMemo(() => new Audio('./sounds/jumpland48000.mp3'), [])
+
+    // function onHit({ totalForceMagnitude }) {
+    //     hitSound.currentTime = 0
+    //     hitSound.volume = Math.min(totalForceMagnitude / 10000, 1)
+    //     hitSound.play()
+    // }
+
+    // useEffect(() => {
+    //     hitSound.muted = !audio
+    // }, [audio])
     return (
         <>
             {/* We can wrap all the meshes in 1 RigidBody bcs react-three/rapier will create 1 collider for each one */}
-            <RigidBody type="fixed" restitution={0.2} friction={0}>
+            <RigidBody
+                type="fixed"
+                restitution={0.2}
+                friction={0}
+                // onContactForce={onHit}
+            >
                 {/* Right wall */}
                 <mesh
                     //Don't ask me why this formula, just put random values until it works.
