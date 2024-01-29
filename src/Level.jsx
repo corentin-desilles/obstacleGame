@@ -43,10 +43,10 @@ export function BlockStart({ position = [0, 0, 0] }) {
 }
 
 export function BlockEnd({ position = [0, 0, 0] }) {
-    const hamburger = useGLTF('./hamburger.glb')
+    const trophy = useGLTF('./trophy.glb')
 
     //To activate shadows on the model we use forEach  and the the castShadow to true since the scene only contins meshes.
-    hamburger.scene.children.forEach(mesh => {
+    trophy.scene.children.forEach(mesh => {
         mesh.castShadow = true
     })
 
@@ -74,11 +74,11 @@ export function BlockEnd({ position = [0, 0, 0] }) {
             <RigidBody
                 type="fixed"
                 colliders="hull"
-                position={[0, 0.25, 0]}
+                position={[0, 0.4, 0]}
                 restitution={0.2}
                 friction={0}
             >
-                <primitive object={hamburger.scene} scale={0.2} />
+                <primitive object={trophy.scene} scale={0.6} />
             </RigidBody>
         </group>
     )
